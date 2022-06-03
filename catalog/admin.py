@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import Author, Genre, Language, Book, BookInstance
 
-from django.db.models import QuerySet
 # Зарегистрируйте свои модели здесь.
 
 # admin.site.register(Author)
@@ -9,7 +8,6 @@ admin.site.register(Genre)
 admin.site.register(Language)
 # admin.site.register(Book)
 # admin.site.register(BookInstance)
-
 
 """
 Интерфейс администратора:
@@ -22,6 +20,11 @@ https://django.fun/docs/django/ru/4.0/ref/contrib/admin/#modeladmin-objects
 """
 
 
+class BookInline(admin.TabularInline):
+    model = Book
+    extra = 0
+
+
 # Определяем класс администратора
 class AuthorAdmin(admin.ModelAdmin):
 
@@ -32,6 +35,8 @@ class AuthorAdmin(admin.ModelAdmin):
     # Настройка в макете форм на страницах «добавить» и «изменить»
     # https://django.fun/docs/django/ru/4.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.fields
     fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
+
+    inlines = [BookInline]
 
 
 # Зарегистрируйте класс администратора с соответствующей моделью
@@ -74,10 +79,7 @@ class BookInstanceAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('book', 'imprint', 'id')
         }),
-        ('Availability', {
+        ('Наличие', {
             'fields': ('status', 'due_back')
         }),
     )
-
-
-

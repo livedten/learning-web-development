@@ -14,6 +14,11 @@ https://django.fun/docs/django/ru/4.0/topics/http/shortcuts/#django.shortcuts.re
 
 def index(request):
     """Функция отображения для домашней страницы сайта."""
+    # Методы, которые возвращают новый QuerySet:
+    # https://django.fun/docs/django/ru/4.0/ref/models/querysets/#methods-that-return-new-querysets
+    # Поиск Field:
+    # https://django.fun/docs/django/ru/4.0/ref/models/querysets/#field-lookups
+
     # Генерация "количеств" некоторых главных объектов
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
@@ -24,14 +29,19 @@ def index(request):
     # Метод 'all()' применён по умолчанию.
     num_authors = Author.objects.count()
 
+    # Количество жанров и количество книг, которые содержат в своих заголовках какое-либо слово (без учёта регистра)
+    num_genres_word = Genre.objects.filter(name__icontains='Роман').count()
+    num_books_word = Book.objects.filter(title__icontains='Мастер').count()
+
     # Отрисовка HTML-шаблона index.html с данными в переменной контекста context
-    context = {
+    return render(request, 'catalog/index.html', context={
         'num_books': num_books,
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
-    }
-    return render(request, 'catalog/index.html', context=context)
+        'num_genres_word': num_genres_word,
+        'num_books_word': num_books_word,
+    })
 
 
 def books(request):

@@ -53,6 +53,12 @@ class Book(models.Model):
         """Возвращает URL, чтобы получить доступ к подробной записи для этой книги."""
         return reverse('book-detail', args=[str(self.id)])
 
+    def display_genre(self):
+        """Создает строку для жанра. Это необходимо для отображения жанра в Admin."""
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+
+    display_genre.short_description = 'Genre'
+
 
 class BookInstance(models.Model):
     """Модель, представляющая конкретную копию книги (то есть, которая может быть заимствована из библиотеки)."""
@@ -69,7 +75,7 @@ class BookInstance(models.Model):
 
     LOAN_STATUS = (
         ('о', 'На обслуживании'),
-        ('в', 'Выставлена'),
+        ('в', 'Выдана'),
         ('н', 'В наличии'),
         ('р', 'Зарезервирована'),
     )

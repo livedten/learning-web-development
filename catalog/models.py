@@ -93,7 +93,7 @@ class BookInstance(models.Model):
     # когда на нее ссылается BookInstance.
     book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True, verbose_name='книга')
     imprint = models.CharField(max_length=200, verbose_name='печать')
-    due_back = models.DateField(null=True, blank=True,verbose_name='ожидаемая дата возврата')
+    due_back = models.DateField(null=True, blank=True, verbose_name='ожидаемая дата возврата')
 
     LOAN_STATUS = (
         ('о', 'На обслуживании'),

@@ -1,0 +1,44 @@
+<!-- Сообщаем браузеру как стоит обрабатывать эту страницу -->
+<!DOCTYPE html>
+<!-- Оболочка документа, указываем язык содержимого -->
+<html lang="ru">
+    <!-- Заголовок страницы, контейнер для других важных данных (не отображается) -->
+    <head>
+        <!-- Кодировка страницы -->
+        <meta charset="UTF-8">
+        <!-- Заголовок страницы в браузере -->
+        {% block title %}<title>Заголовок</title>{% endblock %}
+        <!-- Адаптивность  -->
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+        <!-- Добавляем дополнительный статический CSS-файл -->
+        <!-- Управление статическими файлами -->
+        <!-- https://docs.djangoproject.com/en/4.0/howto/static-files/ -->
+        {% load static %}
+        <!-- Подключаем CSS -->
+        <link rel="stylesheet" href="{% static 'catalog/css/styles.css' %}">
+        <!-- Подключаем IMG(изображение) -->
+        <img src="{% static 'catalog/img/46554944.jpg' %}" alt="My image" style="width:555px;height:540px;"/>
+        <link rel="shortcut icon" href="{% static 'catalog/img/46554944.jpg' %}" type="image/x-icon"/>
+
+        <!-- Подключаем JavaScript и CSS от Bootstrap. jQuery -->
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+              crossorigin="anonymous">
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+                crossorigin="anonymous"></script>
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+<!-- Отображаемое тело страницы -->
+<body>
+    <!-- Вставьте текст навигации по умолчанию для каждой страницы -->
+    {% block sidebar %}{% endblock %}
+    <!-- Текст контента по умолчанию (обычно пусто) -->
+    {% block content %}{% endblock %}
+</body>
+</html>

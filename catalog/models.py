@@ -92,7 +92,7 @@ class BookInstance(models.Model):
     # Ключ указывает on_delete=models.RESTRICT, чтобы гарантировать, что книга не может быть удалена,
     # когда на нее ссылается BookInstance.
     book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True, verbose_name='книга')
-    imprint = models.CharField(max_length=200, verbose_name='печать')
+    imprint = models.CharField(max_length=200, verbose_name='копии')
     due_back = models.DateField(null=True, blank=True, verbose_name='ожидаемая дата возврата')
 
     LOAN_STATUS = (

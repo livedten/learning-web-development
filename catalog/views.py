@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Author, Genre, Language, Book, BookInstance
+from django.views import generic
 
 # Create your views here.
 
@@ -44,17 +45,51 @@ def index(request):
     })
 
 
-def books(request):
-    return HttpResponse("Список всех книг")
+# Встроенный API представлений на основе классов:
+# https://django.fun/docs/django/ru/4.0/ref/class-based-views/
+# https://ccbv.co.uk/
+# Общие представления на основе классов - упрощенный индекс:
+# https://django.fun/docs/django/ru/4.0/ref/class-based-views/flattened-index/#ListView
+class BookListView(generic.ListView):
+    """Представление просмотра списка"""
+    model = Book
+    # Ваше собственное имя для списка в качестве переменной шаблона
+    context_object_name = 'book_list'
+    # Получите 5 книг, содержащих жанр 'Мастер' в заголовке
+    # queryset = Book.objects.filter(title__icontains='Мастер')[:5]
+    # Укажите собственное имя/местоположение шаблона
+    template_name = 'catalog/book_list.html'
+    # Постраничный вывод (Pagination)
+    paginate_by = 3
+
+    def get_queryset(self):
+        # Получите список всех книг
+        return Book.objects.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        # В первую очередь получаем базовую реализацию контекста
+        context = super(BookListView, self).get_context_data(**kwargs)
+        # Добавляем новую переменную к контексту и инициализируем её некоторым значением
+        context['some_data'] = 'Это просто некоторые данные'
+        return context
 
 
-def authors(request):
-    return HttpResponse("Список всех авторов")
+class BookDetailView(generic.DetailView):
+    """Представление подробного вида"""
+    model = Book
 
 
-def book(request):
-    return HttpResponse("Детальная информация для определённой книги")
+class AuthorListView(generic.ListView):
+    """Представление просмотра списка"""
+    model = Author
+    context_object_name = 'author_list'
+    template_name = 'catalog/author_list.html'
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Author.objects.all()
 
 
-def author(request):
-    return HttpResponse("Детальная информация для определённого автора")
+class AuthorDetailView(generic.DetailView):
+    """Представление подробного вида"""
+    model = Author

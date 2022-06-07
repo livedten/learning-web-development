@@ -34,6 +34,22 @@ def index(request):
     num_genres_word = Genre.objects.filter(name__icontains='Роман').count()
     num_books_word = Book.objects.filter(title__icontains='Мастер').count()
 
+    # Как использовать сессии:
+    # https://django.fun/docs/django/ru/4.0/topics/http/sessions/
+    # Количество посещений этого представления, подсчитанное в переменной сеанса.
+
+    num_visits = request.session.get('num_visits', 0)
+
+    # Подбор числового окончания "раз" = True  или "раза" = False
+    def the_ending():
+        value = num_visits % 10
+        if value == 2 or value == 3 or value == 4:
+            request.session['num_visits'] = num_visits + 1
+            return False
+        return True
+
+    request.session['num_visits'] = num_visits + 1
+
     # Отрисовка HTML-шаблона index.html с данными в переменной контекста context
     return render(request, 'catalog/index.html', context={
         'num_books': num_books,
@@ -42,6 +58,8 @@ def index(request):
         'num_authors': num_authors,
         'num_genres_word': num_genres_word,
         'num_books_word': num_books_word,
+        'num_visits': num_visits,
+        'the_ending': the_ending,
     })
 
 

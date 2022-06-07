@@ -20,4 +20,13 @@
         <li><strong>Количество книг:</strong> {{ num_books_word }}</li>
     </ul>
 
+    <!-- Отображение сеансов посещения -->
+    <p>Вы посетили эту страницу {{ num_visits }}
+        {% if the_ending %}
+            раз
+        {% else %}
+            раза
+        {% endif %}.
+    </p>
+
 {% endblock %}

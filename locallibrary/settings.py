@@ -32,7 +32,9 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    # Фреймворк аутентификации и моделей по умолчанию.
     'django.contrib.auth',
+    # Django контент-типовая система (даёт разрешения, связанные с моделями).
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -43,9 +45,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # Управление сессиями между запросами
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    # Связывает пользователей, использующих сессии, запросами.
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -115,12 +119,20 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Статические файлы (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
+# Тип поля первичного ключа по умолчанию
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Перенаправление на домашний URL-адрес после входа в систему (по умолчанию перенаправляется на /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
+
+# Регистрирует любые письма, отправленные на консоль (чтобы вы могли скопировать ссылку на сброс пароля с консоли)
+# https://docs.djangoproject.com/en/4.0/topics/email/
+# https://django.fun/docs/django/ru/4.0/topics/email/
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

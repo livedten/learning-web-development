@@ -29,6 +29,30 @@
                     <li><a href="{% url 'index' %}">Главная</a></li>
                     <li><a href="{% url 'books' %}">Все книги</a></li>
                     <li><a href="{% url 'authors' %}">Все авторы</a></li>
+
+                    <!-- Тестирование в шаблонах -->
+                    <!-- Использование системы аутентификации Django user-->
+                    <!-- https://django.fun/docs/django/ru/4.0/topics/auth/default/#limiting-access-to-logged-in-users -->
+                    <ul class="sidebar-nav">
+                        {% if user.is_authenticated %}
+                            <li>Пользователь: {{ user.get_username }}</li>
+                            <li><a href="{% url 'my-borrowed' %}">Мои заимствования</a></li>
+                            <li><a href="{% url 'logout' %}?next={{request.path}}">Выйти</a></li>
+
+                                <!-- Разрешения текущего пользователя -->
+                                {% if perms.catalog.can_mark_returned %}
+                                    <hr>
+                                    <ul class="sidebar-nav">
+                                        <li>Сотрудник</li>
+                                        <li><a href="{% url 'all-borrowed' %}">Все заимствованные</a></li>
+                                    </ul>
+                                {% endif %}
+
+                        {% else %}
+                            <li><a href="{% url 'login' %}?next={{request.path}}">Авторизоваться</a></li>
+                        {% endif %}
+                     </ul>
+
                 </ul>
             {% endblock %}
         </div>

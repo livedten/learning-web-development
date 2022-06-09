@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Author, Genre, Language, Book, BookInstance
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 # Create your views here.
 
@@ -111,3 +112,28 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     """Представление подробного вида"""
     model = Author
+
+
+# Тестирование проверки подлинности пользователей
+# Тестирование в представления
+# https://django.fun/docs/django/ru/4.0/topics/auth/default/#limiting-access-to-logged-in-users
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    """Общий список книг на основе классов, предоставленных текущему пользователю."""
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='в').order_by('due_back')
+
+
+class LoanedBooksByStaffListView(PermissionRequiredMixin, generic.ListView):
+    """Проверка разрешений на основе класса, предоставленных текущему сотруднику."""
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_all_book_borrowed_staff.html'
+    paginate_by = 10
+    # Разрешения
+    permission_required = 'catalog.can_mark_returned'
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(status__exact='в').order_by('due_back')

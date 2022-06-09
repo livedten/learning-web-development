@@ -25,4 +25,6 @@ urlpatterns = [
     path('authors/', views.AuthorListView.as_view(), name='authors'),   # Список всех авторов
     # Детальная информация для определённого автора
     re_path(r'^author/(?P<pk>\d+)$', views.AuthorDetailView.as_view(), name='author-detail'),
+    re_path(r'^mybooks/$', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
+    re_path(r'^allbooks/$', views.LoanedBooksByStaffListView.as_view(), name='all-borrowed'),
 ]

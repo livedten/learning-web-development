@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse     # Используется для генерации URL-адресов путем отмены шаблонов URL-адреса
 import uuid     # Требуется для уникальных экземпляров книги
+from django.contrib.auth.models import User
+from datetime import date
 
 # Create your models here.
 
@@ -107,6 +109,17 @@ class BookInstance(models.Model):
                               default='о',
                               help_text='Доступность книги',
                               verbose_name='статус')
+    borrower = models.ForeignKey(User,
+                                 on_delete=models.SET_NULL,
+                                 null=True, blank=True,
+                                 verbose_name='абонент-пользователь')
+
+    # Свойство которое можно вызвать из шаблонов, чтобы указать, просрочен ли конкретный экземпляр книги
+    @property
+    def is_overdue(self):
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
 
     class Meta:
         """Передача метаданных модели"""
@@ -121,6 +134,9 @@ class BookInstance(models.Model):
 
         # Имя во множественном числе для объекта:
         verbose_name_plural = 'экземпляры книг'
+
+        # Определение разрешений:
+        permissions = (('can_mark_returned', 'установить книгу как возвращенную'), )
 
     def __str__(self):
         """Строка для представления объекта модели (на сайте администратора и т.д.)."""

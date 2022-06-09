@@ -66,7 +66,7 @@ class BookAdmin(admin.ModelAdmin):
 # Зарегистрируйте классы администратора для BookInstance с помощью декоратора.
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
-    list_display = ('book', 'status', 'due_back', 'id')
+    list_display = ('book', 'status', 'borrower', 'due_back', 'id')
 
     # Добавление фильтров списка:
     # https://django.fun/docs/django/ru/4.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_filter
@@ -80,6 +80,6 @@ class BookInstanceAdmin(admin.ModelAdmin):
             'fields': ('book', 'imprint', 'id')
         }),
         ('Наличие', {
-            'fields': ('status', 'due_back')
+            'fields': ('status', 'due_back', 'borrower')
         }),
     )
